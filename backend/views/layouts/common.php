@@ -217,6 +217,55 @@ $logEntries[] = [
                             'active' => Yii::$app->controller->id === 'user',
                             'visible' => Yii::$app->user->can('administrator'),
                         ],
+//                      Test
+                        [
+                            'label' => Yii::t('backend', 'Test'),
+                            'options' => ['class' => 'nav-header'],
+                        ],
+                        [
+                            'label' => Yii::t('backend', 'Tests'),
+                            'url' => '#',
+                            'icon' => FAS::icon('stream', ['class' => ['nav-icon']]),
+                            'options' => ['class' => 'nav-item has-treeview'],
+                            'active' => 'test' === Yii::$app->controller->module->id &&
+                                ('test' === Yii::$app->controller->id),
+                            'items' => [
+                                [
+                                    'label' => Yii::t('backend', 'Test'),
+                                    'url' => ['/test/test/index'],
+                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
+                                    'active' => Yii::$app->controller->id === 'test',
+                                ],
+                            ],
+                        ],
+                        [
+                            'label' => Yii::t('backend', 'Questions'),
+                            'url' => '#',
+                            'icon' => FAS::icon('newspaper', ['class' => ['nav-icon']]),
+                            'options' => ['class' => 'nav-item has-treeview'],
+                            'active' => 'test' === Yii::$app->controller->module->id &&
+                                ('question' === Yii::$app->controller->id),
+                            'items' => [
+                                [
+                                    'label' => Yii::t('backend', 'Question'),
+                                    'url' => ['/test/question/index'],
+                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
+                                    'active' => Yii::$app->controller->id === 'question',
+                                ],
+                            ],
+                        ],
+                        [
+                            'label' => Yii::t('backend', 'Tags'),
+                            'url' => ['/test/tag/index'],
+                            'icon' => FAS::icon('exchange-alt', ['class' => ['nav-icon']]),
+                            'active' => (Yii::$app->controller->id == 'tag'),
+                        ],
+                        [
+                            'label' => Yii::t('backend', 'Levels'),
+                            'url' => ['/test/level/index'],
+                            'icon' => FAS::icon('sync', ['class' => ['nav-icon']]),
+                        ],
+//                      End Test
                         [
                             'label' => Yii::t('backend', 'Content'),
                             'options' => ['class' => 'nav-header'],

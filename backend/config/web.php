@@ -4,6 +4,14 @@ $config = [
     'controllerNamespace' => 'backend\controllers',
     'defaultRoute' => 'timeline-event/index',
     'components' => [
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap\BootstrapAsset' => [
+                    'css' => [],
+                ],
+
+            ],
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -38,6 +46,9 @@ $config = [
         'rbac' => [
             'class' => backend\modules\rbac\Module::class,
             'defaultRoute' => 'rbac-auth-item/index',
+        ],
+        'test' => [
+            'class' => backend\modules\test\Module::class,
         ],
     ],
     'as globalAccess' => [
