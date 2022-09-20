@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use dosamigos\taggable\Taggable;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "test".
@@ -14,6 +16,7 @@ use Yii;
  * @property int|null $status
  * @property int|null $deadline
  * @property int|null $user_id
+ * @property int|null $count
  *
  * @property Tag[] $tags
  * @property TestQuestion[] $testQuestions
@@ -22,6 +25,15 @@ use Yii;
  */
 class Test extends \yii\db\ActiveRecord
 {
+    public $level;
+
+    const STATUS_ACTIVE = 1;
+
+    const STATUS_INACTIVE = -1;
+
+    public $tagNames;
+
+
     /**
      * {@inheritdoc}
      */
@@ -37,9 +49,20 @@ class Test extends \yii\db\ActiveRecord
     {
         return [
             [['passing_score'], 'number'],
-            [['started_at', 'status', 'deadline', 'user_id'], 'integer'],
+            [['status', 'deadline', 'user_id', 'count'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['level', 'started_at', 'tagNames'], 'safe']
+        ];
+    }
+
+
+    public function behaviors()
+    {
+        return [
+            'tag' => [
+                'class' => Taggable::className(),
+            ]
         ];
     }
 
@@ -56,6 +79,7 @@ class Test extends \yii\db\ActiveRecord
             'status' => 'Status',
             'deadline' => 'Deadline',
             'user_id' => 'User ID',
+            'count' => 'Question Count'
         ];
     }
 
@@ -106,5 +130,13 @@ class Test extends \yii\db\ActiveRecord
     public static function find()
     {
         return new \common\models\query\TestQuery(get_called_class());
+    }
+
+    public static function getStatus()
+    {
+        return [
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive'
+        ];
     }
 }

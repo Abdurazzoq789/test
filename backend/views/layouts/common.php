@@ -236,6 +236,12 @@ $logEntries[] = [
                                     'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
                                     'active' => Yii::$app->controller->id === 'test',
                                 ],
+                                [
+                                    'label' => Yii::t('backend', 'Test Questions'),
+                                    'url' => ['/test/test-question'],
+                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
+                                    'active' => Yii::$app->controller->id === 'test-question',
+                                ],
                             ],
                         ],
                         [

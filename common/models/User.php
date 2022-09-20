@@ -313,4 +313,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getPrimaryKey();
     }
+
+    public static function getDropdownList()
+    {
+        return ArrayHelper::map(self::find()->active()->all(), 'id', 'username');
+    }
 }

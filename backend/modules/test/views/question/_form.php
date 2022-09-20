@@ -40,37 +40,19 @@ use yii\helpers\Html;
                         ]
                     ]) ?>
 
-                    <?php if ($model->id) : ?>
-                        <?= $form->field($model, 'tagNames')->widget(SelectizeTextInput::class, [
-                            // calls an action that returns a JSON object with matched
-                            // tags
-                            'loadUrl' => ['question/tag-list'],
-                            'options' => ['class' => 'form-control'],
-                            'clientOptions' => [
-                                'plugins' => ['remove_button'],
-                                'valueField' => 'name',
-                                'labelField' => 'name',
-                                'searchField' => ['name'],
-                                'create' => true,
-                            ],
-                        ]) ?>
-                    <?php else: ?>
-
-                        <?= $form->field($model, 'tagNames')->widget(SelectizeTextInput::class, [
-                            // calls an action that returns a JSON object with matched
-                            // tags
-                            'loadUrl' => ['question/tag-list'],
-                            'options' => ['class' => 'form-control'],
-                            'clientOptions' => [
-                                'plugins' => ['remove_button'],
-                                'valueField' => 'name',
-                                'labelField' => 'name',
-                                'searchField' => ['name'],
-                                'create' => true,
-                            ],
-                        ]) ?>
-
-                    <?php endif; ?>
+                    <?= $form->field($model, 'tagNames')->widget(SelectizeTextInput::class, [
+                        // calls an action that returns a JSON object with matched
+                        // tags
+                        'loadUrl' => ['question/tag-list'],
+                        'options' => ['class' => 'form-control'],
+                        'clientOptions' => [
+                            'plugins' => ['remove_button'],
+                            'valueField' => 'name',
+                            'labelField' => 'name',
+                            'searchField' => ['name'],
+                            'create' => true,
+                        ],
+                    ]) ?>
                 </div>
             </div>
         </div>
