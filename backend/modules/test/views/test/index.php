@@ -38,9 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'id',
                     'title',
-                    'passing_score',
                     'started_at',
-                    'status',
+                    'count',
                     // 'deadline',
                     // 'user_id',
                     

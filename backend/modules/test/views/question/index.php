@@ -16,13 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card">
         <div class="card-header">
             <?php echo Html::a(Yii::t('backend', 'Create {modelClass}', [
-    'modelClass' => 'Question',
-]), ['create'], ['class' => 'btn btn-success']) ?>
+                'modelClass' => 'Question',
+            ]), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
 
         <div class="card-body p-0">
             <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+
             <?php echo GridView::widget([
                 'layout' => "{items}\n{pager}",
                 'options' => [
@@ -37,17 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'yii\grid\SerialColumn'],
 
                     'id',
-                    'text:ntext',
+                    [
+                        'label' => 'text',
+                        'value' => function($model){
+                            return mb_strcut($model->text, 0, 30);
+                        }
+                    ],
                     'score',
                     'level_id',
                     'status',
                     // 'created_at',
                     // 'updated_at',
-                    
+
                     ['class' => \common\widgets\ActionColumn::class],
                 ],
             ]); ?>
-    
+
         </div>
         <div class="card-footer">
             <?php echo getDataProviderSummary($dataProvider) ?>

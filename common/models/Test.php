@@ -5,6 +5,7 @@ namespace common\models;
 use dosamigos\taggable\Taggable;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Query;
 
 /**
  * This is the model class for table "test".
@@ -25,12 +26,13 @@ use yii\behaviors\TimestampBehavior;
  */
 class Test extends \yii\db\ActiveRecord
 {
-    public $level;
+    public $level_id;
 
     const STATUS_ACTIVE = 1;
 
     const STATUS_INACTIVE = -1;
 
+    const STATUS_COMPETED = 6;
     public $tagNames;
 
 
@@ -50,6 +52,7 @@ class Test extends \yii\db\ActiveRecord
         return [
             [['passing_score'], 'number'],
             [['status', 'deadline', 'user_id', 'count'], 'integer'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
             [['title'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['level', 'started_at', 'tagNames'], 'safe']
@@ -111,6 +114,26 @@ class Test extends \yii\db\ActiveRecord
     public function getTestTags()
     {
         return $this->hasMany(TestTag::className(), ['test_id' => 'id']);
+    }
+
+    public function getQuestionCount()
+    {
+        return $this->getTestQuestions()->count();
+    }
+
+    public function getTestResult($correct = Answer::ANSWER_CORRECT)
+    {
+        $query = (new Query())->from('test_question_answer')
+            ->leftJoin("test_question tq", "tq.id = test_question_answer.test_question_id")
+            ->leftJoin("answer a", "a.id = test_question_answer.answer_id")
+            ->andWhere(['tq.test_id' => $this->id]);
+
+        if ($correct == Answer::ANSWER_CORRECT) {
+            $query->andWhere(['a.correct' => Answer::ANSWER_CORRECT]);
+        } elseif ($correct == Answer::ANSWER_INCORRECT) {
+            $query->andWhere(['a.correct' => Answer::ANSWER_INCORRECT]);
+        }
+        return $query->count();
     }
 
     /**

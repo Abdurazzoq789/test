@@ -7,7 +7,7 @@ use yii\bootstrap4\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Test $model
+ * @var \backend\modules\test\models\forms\TestForm $model
  * @var yii\bootstrap4\ActiveForm $form
  */
 ?>
@@ -21,8 +21,6 @@ use yii\bootstrap4\ActiveForm;
                     <?php echo $form->errorSummary($model); ?>
 
                     <?php echo $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-                    <?php echo $form->field($model, 'passing_score')->textInput() ?>
-                    <?php echo $form->field($model, 'status')->dropdownList(\common\models\Test::getStatus()) ?>
                     <?php echo $form->field($model, 'count')->textInput(['type' => 'number']) ?>
 
                 </div>
@@ -38,7 +36,6 @@ use yii\bootstrap4\ActiveForm;
                             'autoclose' => true
                         ]
                     ]) ?>
-                    <?php echo $form->field($model, 'deadline')->textInput(['type' => 'number']) ?>
                     <?php echo $form->field($model, 'user_id')->widget(\kartik\select2\Select2::class, [
                         'data' => \common\models\User::getDropdownList(),
                         'options' => [
@@ -46,7 +43,7 @@ use yii\bootstrap4\ActiveForm;
                         ]
                     ]) ?>
 
-                    <?php echo $form->field($model, 'level')->widget(\kartik\select2\Select2::class, [
+                    <?php echo $form->field($model, 'level_id')->widget(\kartik\select2\Select2::class, [
                         'data' => \common\models\Level::getDropdownList(),
                         'options' => [
                             'placeholder' => 'Select Level for questions'
@@ -68,7 +65,7 @@ use yii\bootstrap4\ActiveForm;
 
                 </div>
                 <div class="card-footer">
-                    <?php echo Html::submitButton($model->isNewRecord ? Yii::t('backend', 'Create') : Yii::t('backend', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                    <?php echo Html::submitButton(Yii::t('backend', 'Create'), ['class' => 'btn btn-success']) ?>
                 </div>
             </div>
         </div>

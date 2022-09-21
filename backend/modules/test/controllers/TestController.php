@@ -2,16 +2,15 @@
 
 namespace backend\modules\test\controllers;
 
-use common\models\Question;
-use common\models\TestQuestion;
-use Yii;
-use common\models\Test;
+use backend\modules\test\models\forms\TestForm;
+use backend\modules\test\models\search\TestQuestionSearch;
 use backend\modules\test\models\search\TestSearch;
+use common\models\Test;
+use Yii;
 use yii\db\Query;
-use yii\helpers\VarDumper;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * TestController implements the CRUD actions for Test model.
@@ -47,6 +46,30 @@ class TestController extends Controller
         ]);
     }
 
+    public function actionResult($id)
+    {
+        $model = $this->findModel($id);
+
+        return $this->render('result', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionAnswer($test_id, $correct = false)
+    {
+        $searchModel = new TestQuestionSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->bodyParams);
+        $dataProvider->query->andWhere(['test_id' => $test_id]);
+        $dataProvider->query->joinWith('answers');
+        if ($correct !== false) {
+            $dataProvider->query->andWhere(['answer.correct' => $correct]);
+        }
+
+        return $this->render('answer', [
+            'dataProvider' => $dataProvider
+        ]);
+    }
+
     /**
      * Displays a single Test model.
      * @param int $id ID
@@ -66,25 +89,10 @@ class TestController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Test();
+        $model = new TestForm();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->started_at = strtotime($model->started_at);
-            if ($model->save()) {
-                $questions = Question::find()
-                    ->andWhere(['level_id' => $model->level])
-                    ->orderBy('rand()')
-                    ->limit($model->count)->all();
-                foreach ($questions as $index => $question) {
-                    $testQuestion = new TestQuestion([
-                        'test_id' => $model->id,
-                        'question_id' => $question->id
-                    ]);
-
-                    $testQuestion->save();
-                }
-                return $this->redirect(['index']);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
         }
         return $this->render('create', [
             'model' => $model,
@@ -99,33 +107,21 @@ class TestController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->started_at = strtotime($model->started_at);
-            if ($model->save()) {
-                TestQuestion::deleteAll(['test_id' => $model->id]);
-                $questions = Question::find()
-                    ->andWhere(['level_id' => $model->level])
-                    ->orderBy('rand()')
-                    ->limit($model->count)->all();
-                foreach ($questions as $index => $question) {
-                    $testQuestion = new TestQuestion([
-                        'test_id' => $model->id,
-                        'question_id' => $question->id
-                    ]);
-
-                    $testQuestion->save();
-                }
-                return $this->redirect(['index']);
-            }
+        $test = $this->findModel($id);
+        $model = new TestForm();
+        $model->setAttributes($test->attributes);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
         }
+
         $model->started_at = Yii::$app->formatter->asDatetime($model->started_at, 'php:Y-m-d H:i:s');
         $model->tagNames = (new Query())->select(['group_concat(name separator ",") as name'])
             ->from("tag")
             ->leftJoin("test_tag", "test_tag.tag_id = tag.id")
             ->andWhere(['test_tag.test_id' => $id])
             ->one()['name'];
+
+
         return $this->render('update', [
             'model' => $model,
         ]);

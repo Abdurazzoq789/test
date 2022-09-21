@@ -46,6 +46,7 @@ class TestQuestionSearch extends TestQuestion
             'query' => $query,
         ]);
 
+
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }

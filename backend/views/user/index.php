@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 [
                     'class' => \common\widgets\ActionColumn::class,
-                    'template' => '{login} {view} {update} {delete}',
+                    'template' => '{tests} {login} {view} {update} {delete}',
                     'options' => ['style' => 'width: 140px'],
                     'buttons' => [
                         'login' => function ($url) {
@@ -91,6 +91,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'title' => Yii::t('backend', 'Login'),
                                     'class' => ['btn', 'btn-xs', 'btn-secondary']
+                                ]
+                            );
+                        },
+                        'tests' => function ($url) {
+                            return Html::a(
+                                FAS::icon('stream', ['aria' => ['hidden' => true], 'class' => ['fa-file']]),
+                                $url,
+                                [
+                                    'title' => Yii::t('backend', 'Tests'),
+                                    'class' => ['btn', 'btn-xs', 'btn-primary']
                                 ]
                             );
                         },

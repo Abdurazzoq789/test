@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\search\UserSearch;
 use backend\models\UserForm;
+use backend\modules\test\models\search\TestSearch;
 use common\models\User;
 use common\models\UserToken;
 use Yii;
@@ -39,6 +40,21 @@ class UserController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Test models.
+     * @return mixed
+     */
+    public function actionTests()
+    {
+        $searchModel = new TestSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('tests', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

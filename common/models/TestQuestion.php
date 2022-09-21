@@ -90,6 +90,11 @@ class TestQuestion extends \yii\db\ActiveRecord
         return $this->hasMany(TestQuestionAnswer::className(), ['test_question_id' => 'id']);
     }
 
+    public function getTestQuestionAnswer()
+    {
+        return $this->hasOne(TestQuestionAnswer::className(), ['test_question_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return \common\models\query\TestQuestionQuery the active query used by this AR class.

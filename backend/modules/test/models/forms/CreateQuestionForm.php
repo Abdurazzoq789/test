@@ -1,4 +1,5 @@
 <?php
+
 namespace backend\modules\test\models\forms;
 
 use common\models\Answer;
@@ -36,28 +37,26 @@ class CreateQuestionForm extends Model
 
     public function save()
     {
-        if (!$this->validate()){
+        if (!$this->validate()) {
             return false;
         }
-//        VarDumper::dump($this->attributes, 100, true);
-//        die();
         $transaction = \Yii::$app->db->beginTransaction();
 
         if (!$this->id) {
             $model = new Question();
         } else {
-           $model = Question::findOne($this->id);
+            $model = Question::findOne($this->id);
         }
 
         $model->setAttributes($this->attributes);
 
-        if (!$model->save()){
+        if (!$model->save()) {
             $transaction->rollBack();
             $this->addErrors($model->errors);
             return false;
         }
 
-        if (count($this->answers)){
+        if (count($this->answers)) {
             $counter = 1;
             Answer::deleteAll(['question_id' => $model->id]);
             foreach ($this->answers as $index => $answer) {
@@ -65,7 +64,7 @@ class CreateQuestionForm extends Model
                 $answerModel->setAttributes($answer);
                 $answerModel->sort = $counter;
                 $answerModel->question_id = $model->id;
-                if (!$answerModel->save()){
+                if (!$answerModel->save()) {
                     $transaction->rollBack();
                     $this->addErrors($answerModel->errors);
                     return false;

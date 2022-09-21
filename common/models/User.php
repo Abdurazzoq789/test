@@ -318,4 +318,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return ArrayHelper::map(self::find()->active()->all(), 'id', 'username');
     }
+
+    public function getTests(){
+        return $this->hasMany(Test::class, ['user_id' => 'id']);
+    }
 }

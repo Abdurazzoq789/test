@@ -88,6 +88,11 @@ class Question extends \yii\db\ActiveRecord
         return $this->hasMany(Answer::className(), ['question_id' => 'id']);
     }
 
+    public function getCorrectAnswer()
+    {
+        return $this->hasOne(Answer::className(), ['question_id' => 'id'])->andWhere(['correct' => Answer::ANSWER_CORRECT]);
+    }
+
     /**
      * Gets query for [[Level]].
      *
