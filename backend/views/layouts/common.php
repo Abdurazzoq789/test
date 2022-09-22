@@ -235,20 +235,10 @@ $logEntries[] = [
                             ],
                         ],
                         [
-                            'label' => Yii::t('backend', 'Questions'),
-                            'url' => '#',
-                            'icon' => FAS::icon('newspaper', ['class' => ['nav-icon']]),
-                            'options' => ['class' => 'nav-item has-treeview'],
-                            'active' => 'test' === Yii::$app->controller->module->id &&
-                                ('question' === Yii::$app->controller->id),
-                            'items' => [
-                                [
-                                    'label' => Yii::t('backend', 'Question'),
-                                    'url' => ['/test/question/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                    'active' => Yii::$app->controller->id === 'question',
-                                ],
-                            ],
+                            'label' => Yii::t('backend', 'Question'),
+                            'url' => ['/test/question/index'],
+                            'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
+                            'active' => Yii::$app->controller->id === 'question',
                         ],
                         [
                             'label' => Yii::t('backend', 'Tags'),

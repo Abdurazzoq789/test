@@ -89,40 +89,27 @@ class TestController extends Controller
      */
     public function actionCreate()
     {
-        $model = new TestForm();
+        return $this->form(
+            new TestForm(
+                new Test()
+            )
+        );
+    }
 
+    public function actionUpdate($id)
+    {
+        return $this->form(
+            new TestForm(
+                $this->findModel($id)
+            )
+        );
+    }
+
+    public function form(TestForm $model){
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
         return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Test model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $test = $this->findModel($id);
-        $model = new TestForm();
-        $model->setAttributes($test->attributes);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        }
-
-        $model->started_at = Yii::$app->formatter->asDatetime($model->started_at, 'php:Y-m-d H:i:s');
-        $model->tagNames = (new Query())->select(['group_concat(name separator ",") as name'])
-            ->from("tag")
-            ->leftJoin("test_tag", "test_tag.tag_id = tag.id")
-            ->andWhere(['test_tag.test_id' => $id])
-            ->one()['name'];
-
-
-        return $this->render('update', [
             'model' => $model,
         ]);
     }

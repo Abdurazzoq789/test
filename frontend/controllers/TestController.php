@@ -5,17 +5,10 @@ namespace frontend\controllers;
 use backend\modules\test\models\forms\TestForm;
 use backend\modules\test\models\search\TestQuestionSearch;
 use backend\modules\test\models\search\TestSearch;
-use common\models\Article;
-use common\models\ArticleCategory;
-use common\models\ArticleAttachment;
 use common\models\Test;
 use common\models\TestQuestion;
-use common\models\TestQuestionAnswer;
-use frontend\models\search\ArticleSearch;
-use Swagger\Util;
+use frontend\models\forms\BeginForm;
 use Yii;
-use yii\base\Model;
-use yii\db\Query;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -49,40 +42,18 @@ class TestController extends Controller
     public function actionBegin($id)
     {
         $test = $this->findModel($id);
-        if (!$test->started_at){
-            $test->updateAttributes(['started_at' => time()]);
-        }
-        $model = new TestQuestionAnswer();
-        $subQuery = (new Query())->select('test_question_id')
-            ->from('test_question_answer');
+        $model = new BeginForm($test);
 
-        $testQuestion = TestQuestion::find()
-            ->andWhere(['test_id' => $test->id])
-            ->andWhere(['not in', 'id', $subQuery])
-            ->orderBy(['status' => SORT_ASC])
-            ->one();
-
-        if ($testQuestion == null ||
-            $test->status == Test::STATUS_COMPETED ||
-            time() > ($test->started_at + ($test->deadline * 60)))
-        {
-            $test->updateAttributes(['status' => Test::STATUS_COMPETED]);
-            return $this->render('results', [
-                'model' => $test
-            ]);
+        if ($model->done) {
+            return $this->redirect(['result', 'id' => $model->test->id]);
         }
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->test_question_id = $testQuestion->id;
-            if ($model->save()) {
-                return $this->refresh();
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->refresh();
         }
-
 
         return $this->render('begin', [
-            'testQuestion' => $testQuestion,
-            'model' => $model
+            'testQuestion' => $model->testQuestion,
         ]);
     }
 
@@ -108,8 +79,10 @@ class TestController extends Controller
     {
         $searchModel = new TestQuestionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->bodyParams);
+
         $dataProvider->query->andWhere(['test_id' => $test_id]);
         $dataProvider->query->joinWith('answers');
+
         if ($correct !== false) {
             $dataProvider->query->andWhere(['answer.correct' => $correct]);
         }
@@ -129,11 +102,17 @@ class TestController extends Controller
 
     public function actionCreate()
     {
-        $model = new TestForm();
+        return $this->form(
+            new TestForm(
+                new Test(['user_id' => Yii::$app->user->id])
+            )
+        );
+    }
 
+    public function form(TestForm $model)
+    {
         if ($model->load(Yii::$app->request->post())) {
-            $model->user_id = Yii::$app->user->getId();
-            if ($model->save()){
+            if ($model->save()) {
                 return $this->redirect(['index']);
             }
         }
@@ -141,5 +120,4 @@ class TestController extends Controller
             'model' => $model,
         ]);
     }
-
 }

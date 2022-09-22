@@ -39,7 +39,7 @@ class QuestionForm extends Model
         $this->answers = $question->answers;
         $this->tagNames = (new Query())->select(['group_concat(name separator ",") as name'])
             ->from("tag")
-            ->leftJoin("question_tag", "question_tag.tag_id = tag.id")
+            ->innerJoin("question_tag", "question_tag.tag_id = tag.id")
             ->andWhere(['question_tag.question_id' => $question->id])
             ->one()['name'];
 
@@ -50,7 +50,7 @@ class QuestionForm extends Model
     public function rules()
     {
         return [
-            [['text', 'score', 'level_id'], 'required'],
+            [['text', 'level_id'], 'required'],
             [['status', 'id'], 'integer'],
             [['tagNames', 'answers'], 'safe'],
         ];

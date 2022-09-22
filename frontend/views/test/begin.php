@@ -1,7 +1,6 @@
 <?php
 /**
  * @var $testQuestion \common\models\TestQuestion
- * @var $model \common\models\TestQuestionAnswer
  */
 
 use common\models\Answer;
@@ -33,7 +32,7 @@ $correctCount = $testQuestion->question->getCorrectAnswer()->count()
             <div class="row">
                 <?php foreach ($testQuestion->question->answers as $answerIndex => $answer) : ?>
                     <div class="col-6">
-                        <input type="radio" name="TestQuestionAnswer[answer_id]" value="<?= $answer->id ?>"
+                        <input type="radio" name="BeginForm[answer_id]" value="<?= $answer->id ?>"
                                id="<?= $answer->id ?>">
                         <label for="<?= $answer->id ?>"><?= $answer->text ?></label>
                     </div>

@@ -32,11 +32,29 @@ class TestForm extends \yii\base\Model
 
     public $levelIds;
 
+    public Test $test;
+
+    public function __construct(Test $test, $config = [])
+    {
+        parent::__construct($config);
+        $this->test = $test;
+
+        $this->setAttributes($test->attributes);
+
+        $this->started_at = Yii::$app->formatter->asDatetime($this->started_at, 'php:Y-m-d H:i:s');
+
+        $this->tagNames = (new Query())->select(['group_concat(name separator ",") as name'])
+            ->from("tag")
+            ->innerJoin("test_tag", "test_tag.tag_id = tag.id")
+            ->andWhere(['test_tag.test_id' => $test->id])
+            ->one()['name'];
+    }
+
     public function rules()
     {
         return [
             [['id', 'count', 'user_id', 'deadline', 'level_id'], 'integer'],
-            [['title', 'count', 'user_id', 'deadline'], 'required'],
+            [['title', 'count', 'deadline'], 'required'],
             [['tagNames', 'started_at', 'levelIds', 'tagIds'], 'safe'],
         ];
     }
@@ -49,17 +67,17 @@ class TestForm extends \yii\base\Model
 
         $this->deadline = abs($this->deadline);
 
-        $model = new Test();
-        if ($this->id) {
-            $model = Test::findOne($this->id);
-            TestQuestion::deleteAll(['test_id' => $model->id]);
-        }
+        $model = $this->test;
 
         $model->setAttributes($this->attributes);
 
         if (!$model->save()) {
             $this->addErrors($model->errors);
             return false;
+        }
+
+        if (!$this->test->isNewRecord) {
+            TestQuestion::deleteAll(['test_id' => $model->id]);
         }
 
         $questionsQuery = Question::find()
