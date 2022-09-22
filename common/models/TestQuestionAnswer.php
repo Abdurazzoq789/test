@@ -15,6 +15,8 @@ use Yii;
  */
 class TestQuestionAnswer extends \yii\db\ActiveRecord
 {
+    public $answerIds;
+
     /**
      * {@inheritdoc}
      */
@@ -31,6 +33,7 @@ class TestQuestionAnswer extends \yii\db\ActiveRecord
         return [
             [['test_question_id', 'answer_id'], 'required'],
             [['test_question_id', 'answer_id'], 'integer'],
+            [['answerIds'], 'safe'],
             [['test_question_id', 'answer_id'], 'unique', 'targetAttribute' => ['test_question_id', 'answer_id']],
             [['answer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Answer::className(), 'targetAttribute' => ['answer_id' => 'id']],
             [['test_question_id'], 'exist', 'skipOnError' => true, 'targetClass' => TestQuestion::className(), 'targetAttribute' => ['test_question_id' => 'id']],

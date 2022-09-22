@@ -1,0 +1,11 @@
+.my-row .item-row{
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.alignleft {
+    float: left;
+}
+.alignright {
+    float: right;
+}

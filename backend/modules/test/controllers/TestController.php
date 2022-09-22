@@ -50,7 +50,7 @@ class TestController extends Controller
     {
         $model = $this->findModel($id);
 
-        return $this->render('result', [
+        return $this->render('results', [
             'model' => $model
         ]);
     }

@@ -10,14 +10,20 @@ use Yii;
  * @property int $id
  * @property int|null $test_id
  * @property int|null $question_id
+ * @property int|null $status
  *
  * @property Answer[] $answers
  * @property Question $question
  * @property Test $test
  * @property TestQuestionAnswer[] $testQuestionAnswers
+ * @property TestQuestionAnswer $testQuestionAnswer
  */
 class TestQuestion extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = 1;
+
+    const STATUS_SKIP = 4;
+
     /**
      * {@inheritdoc}
      */
@@ -33,6 +39,7 @@ class TestQuestion extends \yii\db\ActiveRecord
     {
         return [
             [['test_id', 'question_id'], 'integer'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
             [['test_id'], 'exist', 'skipOnError' => true, 'targetClass' => Test::className(), 'targetAttribute' => ['test_id' => 'id']],
         ];

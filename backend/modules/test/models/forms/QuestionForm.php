@@ -6,10 +6,11 @@ use common\models\Answer;
 use common\models\Question;
 use dosamigos\taggable\Taggable;
 use yii\base\Model;
+use yii\db\Query;
 use yii\helpers\VarDumper;
 use yii\web\NotFoundHttpException;
 
-class CreateQuestionForm extends Model
+class QuestionForm extends Model
 {
     public $tagNames;
 
@@ -24,6 +25,26 @@ class CreateQuestionForm extends Model
     public $id;
 
     public $answers;
+
+    public Question $question;
+
+    public function __construct(Question $question,$config = [])
+    {
+        parent::__construct($config);
+
+        $this->score = $question->score;
+        $this->text = $question->text;
+        $this->level_id = $question->level_id;
+        $this->status = $question->status;
+        $this->answers = $question->answers;
+        $this->tagNames = (new Query())->select(['group_concat(name separator ",") as name'])
+            ->from("tag")
+            ->leftJoin("question_tag", "question_tag.tag_id = tag.id")
+            ->andWhere(['question_tag.question_id' => $question->id])
+            ->one()['name'];
+
+        $this->question = $question;
+    }
 
 
     public function rules()
@@ -42,11 +63,7 @@ class CreateQuestionForm extends Model
         }
         $transaction = \Yii::$app->db->beginTransaction();
 
-        if (!$this->id) {
-            $model = new Question();
-        } else {
-            $model = Question::findOne($this->id);
-        }
+        $model = $this->question;
 
         $model->setAttributes($this->attributes);
 

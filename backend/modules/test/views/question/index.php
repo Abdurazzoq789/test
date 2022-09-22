@@ -29,23 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => ['gridview', 'table-responsive'],
                 ],
                 'tableOptions' => [
-                    'class' => ['table', 'text-nowrap', 'table-striped', 'table-bordered', 'mb-0'],
+                    'class' => ['table', 'table-striped', 'table-bordered', 'mb-0'],
                 ],
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+//                    ['class' => 'yii\grid\SerialColumn'],
 
                     'id',
-                    [
-                        'label' => 'text',
-                        'value' => function($model){
-                            return mb_strcut($model->text, 0, 30);
-                        }
-                    ],
-                    'score',
-                    'level_id',
-                    'status',
+                    'text',
+                    // 'score',
                     // 'created_at',
                     // 'updated_at',
 

@@ -22,8 +22,7 @@ use yii\helpers\Html;
                 <div class="card-body">
                     <?= $form->errorSummary($model) ?>
 
-                    <?php echo $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-                    <?php echo $form->field($model, 'status')->dropdownList(\common\models\Question::getStatus()) ?>
+                    <?php echo $form->field($model, 'text')->textarea(['rows' => 4]) ?>
 
                 </div>
             </div>
@@ -32,7 +31,6 @@ use yii\helpers\Html;
             <div class="card">
                 <div class="card-body">
 
-                    <?php echo $form->field($model, 'score')->textInput() ?>
                     <?php echo $form->field($model, 'level_id')->dropdownList(\common\models\Level::getDropdownList(), [
                         'prompt' => [
                             'text' => 'Select Level',

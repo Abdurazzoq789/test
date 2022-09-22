@@ -37,7 +37,7 @@ $logEntries = [
 ];
 foreach (SystemLog::find()->orderBy(['log_time' => SORT_DESC])->limit(5)->all() as $logEntry) {
     $logEntries[] = [
-        'label' => FAS::icon('exclamation-triangle', ['class' => [$logEntry->level === Logger::LEVEL_ERROR ? 'text-red' : 'text-yellow']]). ' '. $logEntry->category,
+        'label' => FAS::icon('exclamation-triangle', ['class' => [$logEntry->level === Logger::LEVEL_ERROR ? 'text-red' : 'text-yellow']]) . ' ' . $logEntry->category,
         'url' => ['/system/log/view', 'id' => $logEntry->id]
     ];
     $logEntries[] = '<div class="dropdown-divider"></div>';
@@ -67,86 +67,86 @@ $logEntries[] = [
         ],
     ]); ?>
 
-        <!-- left navbar links -->
-        <?php echo Nav::widget([
-            'options' => ['class' => ['navbar-nav']],
-            'encodeLabels' => false,
-            'items' => [
-                [
-                    // sidebar menu toggler
-                    'label' => FAS::icon('bars'),
-                    'url' => '#',
-                    'options' => [
-                        'data' => ['widget' => 'pushmenu'],
-                        'role' => 'button',
-                    ]
-                ],
-            ]
-        ]); ?>
-        <!-- /left navbar links -->
+    <!-- left navbar links -->
+    <?php echo Nav::widget([
+        'options' => ['class' => ['navbar-nav']],
+        'encodeLabels' => false,
+        'items' => [
+            [
+                // sidebar menu toggler
+                'label' => FAS::icon('bars'),
+                'url' => '#',
+                'options' => [
+                    'data' => ['widget' => 'pushmenu'],
+                    'role' => 'button',
+                ]
+            ],
+        ]
+    ]); ?>
+    <!-- /left navbar links -->
 
-        <!-- right navbar links -->
-        <?php echo Nav::widget([
-            'options' => ['class' => ['navbar-nav', 'ml-auto']],
-            'encodeLabels' => false,
-            'items' => [
-                [
-                    // timeline events
-                    'label' => FAR::icon('bell').' <span class="badge badge-success navbar-badge">'.TimelineEvent::find()->today()->count().'</span>',
-                    'url'  => ['/timeline-event/index']
+    <!-- right navbar links -->
+    <?php echo Nav::widget([
+        'options' => ['class' => ['navbar-nav', 'ml-auto']],
+        'encodeLabels' => false,
+        'items' => [
+            [
+                // timeline events
+                'label' => FAR::icon('bell') . ' <span class="badge badge-success navbar-badge">' . TimelineEvent::find()->today()->count() . '</span>',
+                'url' => ['/timeline-event/index']
+            ],
+            [
+                // log events
+                'label' => FAS::icon('clipboard-list') . ' <span class="badge badge-warning navbar-badge">' . SystemLog::find()->count() . '</span>',
+                'url' => '#',
+                'linkOptions' => ['class' => ['no-caret']],
+                'dropdownOptions' => [
+                    'class' => ['dropdown-menu', 'dropdown-menu-lg', 'dropdown-menu-right'],
                 ],
-                [
-                    // log events
-                    'label' => FAS::icon('clipboard-list').' <span class="badge badge-warning navbar-badge">'.SystemLog::find()->count().'</span>',
-                    'url' => '#',
-                    'linkOptions' => ['class' => ['no-caret']],
-                    'dropdownOptions' => [
-                        'class' => ['dropdown-menu', 'dropdown-menu-lg', 'dropdown-menu-right'],
-                    ],
-                    'items' => $logEntries,
-                ],
-                '<li class="nav-item dropdown user-menu">
+                'items' => $logEntries,
+            ],
+            '<li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        '.Html::img(Yii::$app->user->identity->userProfile->getAvatar('/img/anonymous.png'), ['class' => ['img-circle', 'elevation-2', 'bg-white', 'user-image'], 'alt' => 'User image']).'
-                        '.Html::tag('span', Yii::$app->user->identity->publicIdentity, ['class' => ['d-none', 'd-md-inline']]).'
+                        ' . Html::img(Yii::$app->user->identity->userProfile->getAvatar('/img/anonymous.png'), ['class' => ['img-circle', 'elevation-2', 'bg-white', 'user-image'], 'alt' => 'User image']) . '
+                        ' . Html::tag('span', Yii::$app->user->identity->publicIdentity, ['class' => ['d-none', 'd-md-inline']]) . '
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <!-- User image -->
                         <li class="user-header bg-primary">
-                            '.Html::img(Yii::$app->user->identity->userProfile->getAvatar('/img/anonymous.png'), ['class' => ['img-circle', 'elevation-2', 'bg-white'], 'alt' => 'User image']).'
+                            ' . Html::img(Yii::$app->user->identity->userProfile->getAvatar('/img/anonymous.png'), ['class' => ['img-circle', 'elevation-2', 'bg-white'], 'alt' => 'User image']) . '
                             <p>
-                                '.Yii::$app->user->identity->publicIdentity.'
-                                <small>'.Yii::t('backend', 'Member since {0, date, short}', Yii::$app->user->identity->created_at).'</small>
+                                ' . Yii::$app->user->identity->publicIdentity . '
+                                <small>' . Yii::t('backend', 'Member since {0, date, short}', Yii::$app->user->identity->created_at) . '</small>
                             </p>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="float-left">
-                                '.Html::a(Yii::t('backend', 'Profile'), ['/sign-in/profile'], ['class' => 'btn btn-default btn-flat']).'
+                                ' . Html::a(Yii::t('backend', 'Profile'), ['/sign-in/profile'], ['class' => 'btn btn-default btn-flat']) . '
                             </div>
                             <div class="float-left">
-                                '.Html::a(Yii::t('backend', 'Account'), ['/sign-in/account'], ['class' => 'btn btn-default btn-flat']).'
+                                ' . Html::a(Yii::t('backend', 'Account'), ['/sign-in/account'], ['class' => 'btn btn-default btn-flat']) . '
                             </div>
                             <div class="float-right">
-                                '.Html::a(Yii::t('backend', 'Logout'), ['/sign-in/logout'], ['class' => 'btn btn-default btn-flat', 'data-method' => 'post']).'
+                                ' . Html::a(Yii::t('backend', 'Logout'), ['/sign-in/logout'], ['class' => 'btn btn-default btn-flat', 'data-method' => 'post']) . '
                             </div>
                         </li>
                     </ul>
                 </li>
                 ',
-                [
-                    // control sidebar button
-                    'label' => FAS::icon('th-large'),
-                    'url'  => '#',
-                    'linkOptions' => [
-                        'data' => ['widget' => 'control-sidebar', 'slide' => 'true'],
-                        'role' => 'button'
-                    ],
-                    'visible' => Yii::$app->user->can('administrator'),
+            [
+                // control sidebar button
+                'label' => FAS::icon('th-large'),
+                'url' => '#',
+                'linkOptions' => [
+                    'data' => ['widget' => 'control-sidebar', 'slide' => 'true'],
+                    'role' => 'button'
                 ],
-            ]
-        ]); ?>
-        <!-- /right navbar links -->
+                'visible' => Yii::$app->user->can('administrator'),
+            ],
+        ]
+    ]); ?>
+    <!-- /right navbar links -->
 
     <?php NavBar::end(); ?>
     <!-- /navbar -->
@@ -154,7 +154,8 @@ $logEntries[] = [
     <!-- main sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4 <?php echo $keyStorage->get('adminlte.sidebar-no-expand') ? 'sidebar-no-expand' : null ?>">
         <!-- brand logo -->
-        <a href="<?php echo Yii::getAlias('@backendUrl') ?>" class="brand-link text-center <?php echo $keyStorage->get('adminlte.brand-text-small') ? 'text-sm' : null ?>">
+        <a href="<?php echo Yii::getAlias('@backendUrl') ?>"
+           class="brand-link text-center <?php echo $keyStorage->get('adminlte.brand-text-small') ? 'text-sm' : null ?>">
             <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                 style="opacity: .8"> -->
             <span class="brand-text font-weight-bold"><?php echo Yii::$app->name ?></span>
@@ -199,17 +200,7 @@ $logEntries[] = [
                         'role' => 'menu',
                     ],
                     'items' => [
-                        [
-                            'label' => Yii::t('backend', 'Main'),
-                            'options' => ['class' => 'nav-header'],
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Timeline'),
-                            'icon' => FAS::icon('stream', ['class' => ['nav-icon']]),
-                            'url' => ['/timeline-event/index'],
-                            'badge' => TimelineEvent::find()->today()->count(),
-                            'badgeBgClass' => 'badge-success',
-                        ],
+//                      Test
                         [
                             'label' => Yii::t('backend', 'Users'),
                             'icon' => FAS::icon('users', ['class' => ['nav-icon']]),
@@ -217,7 +208,6 @@ $logEntries[] = [
                             'active' => Yii::$app->controller->id === 'user',
                             'visible' => Yii::$app->user->can('administrator'),
                         ],
-//                      Test
                         [
                             'label' => Yii::t('backend', 'Test'),
                             'options' => ['class' => 'nav-header'],
@@ -271,155 +261,12 @@ $logEntries[] = [
                             'url' => ['/test/level/index'],
                             'icon' => FAS::icon('sync', ['class' => ['nav-icon']]),
                         ],
-//                      End Test
-                        [
-                            'label' => Yii::t('backend', 'Content'),
-                            'options' => ['class' => 'nav-header'],
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Static pages'),
-                            'url' => ['/content/page/index'],
-                            'icon' => FAS::icon('thumbtack', ['class' => ['nav-icon']]),
-                            'active' => Yii::$app->controller->id === 'page',
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Articles'),
-                            'url' => '#',
-                            'icon' => FAS::icon('newspaper', ['class' => ['nav-icon']]),
-                            'options' => ['class' => 'nav-item has-treeview'],
-                            'active' => 'content' === Yii::$app->controller->module->id &&
-                                ('article' === Yii::$app->controller->id || 'category' === Yii::$app->controller->id),
-                            'items' => [
-                                [
-                                    'label' => Yii::t('backend', 'Articles'),
-                                    'url' => ['/content/article/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                    'active' => Yii::$app->controller->id === 'article',
-                                ],
-                                [
-                                    'label' => Yii::t('backend', 'Categories'),
-                                    'url' => ['/content/category/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                    'active' => Yii::$app->controller->id === 'category',
-                                ],
-                            ],
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Widgets'),
-                            'url' => '#',
-                            'icon' => FAS::icon('puzzle-piece', ['class' => ['nav-icon']]),
-                            'options' => ['class' => 'nav-item has-treeview'],
-                            'active' => Yii::$app->controller->module->id === 'widget',
-                            'items' => [
-                                [
-                                    'label' => Yii::t('backend', 'Text Blocks'),
-                                    'url' => ['/widget/text/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                    'active' => Yii::$app->controller->id === 'text',
-                                ],
-                                [
-                                    'label' => Yii::t('backend', 'Menu'),
-                                    'url' => ['/widget/menu/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                    'active' => Yii::$app->controller->id === 'menu',
-                                ],
-                                [
-                                    'label' => Yii::t('backend', 'Carousel'),
-                                    'url' => ['/widget/carousel/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                    'active' => in_array(Yii::$app->controller->id, ['carousel', 'carousel-item']),
-                                ],
-                            ],
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Translation'),
-                            'options' => ['class' => 'nav-header'],
-                            'visible' => Yii::$app->components["i18n"]["translations"]['*']['class'] === \yii\i18n\DbMessageSource::class,
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Translation'),
-                            'url' => ['/translation/default/index'],
-                            'icon' => FAS::icon('language', ['class' => ['nav-icon']]),
-                            'active' => (Yii::$app->controller->module->id == 'translation'),
-                            'visible' => Yii::$app->components["i18n"]["translations"]['*']['class'] === \yii\i18n\DbMessageSource::class,
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'System'),
-                            'options' => ['class' => 'nav-header'],
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'RBAC Rules'),
-                            'url' => '#',
-                            'icon' => FAS::icon('user-shield', ['class' => ['nav-icon']]),
-                            'options' => ['class' => 'nav-item has-treeview'],
-                            'active' => (Yii::$app->controller->module->id == 'rbac'),
-                            'items' => [
-                                [
-                                    'label' => Yii::t('backend', 'Assignments'),
-                                    'url' => ['/rbac/rbac-auth-assignment/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                ],
-                                [
-                                    'label' => Yii::t('backend', 'Items'),
-                                    'url' => ['/rbac/rbac-auth-item/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                ],
-                                [
-                                    'label' => Yii::t('backend', 'Child Items'),
-                                    'url' => ['/rbac/rbac-auth-item-child/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                ],
-                                [
-                                    'label' => Yii::t('backend', 'Rules'),
-                                    'url' => ['/rbac/rbac-auth-rule/index'],
-                                    'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
-                                ],
-                            ],
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Files'),
-                            'url' => '#',
-                            'icon' => FAS::icon('folder-open', ['class' => ['nav-icon']]),
-                            'options' => ['class' => 'nav-item has-treeview'],
-                            'active' => (Yii::$app->controller->module->id == 'file'),
-                            'items' => [
-                                [
-                                    'label' => Yii::t('backend', 'Storage'),
-                                    'url' => ['/file/storage/index'],
-                                    'icon' => FAS::icon('database', ['class' => ['nav-icon']]),
-                                    'active' => (Yii::$app->controller->id == 'storage'),
-                                ],
-                                [
-                                    'label' => Yii::t('backend', 'Manager'),
-                                    'url' => ['/file/manager/index'],
-                                    'icon' => FAS::icon('archive', ['class' => ['nav-icon']]),
-                                    'active' => (Yii::$app->controller->id == 'manager'),
-                                ],
-                            ],
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Key-Value Storage'),
-                            'url' => ['/system/key-storage/index'],
-                            'icon' => FAS::icon('exchange-alt', ['class' => ['nav-icon']]),
-                            'active' => (Yii::$app->controller->id == 'key-storage'),
-                        ],
                         [
                             'label' => Yii::t('backend', 'Cache'),
                             'url' => ['/system/cache/index'],
                             'icon' => FAS::icon('sync', ['class' => ['nav-icon']]),
                         ],
-                        [
-                            'label' => Yii::t('backend', 'System Information'),
-                            'url' => ['/system/information/index'],
-                            'icon' => FAS::icon('tachometer-alt', ['class' => ['nav-icon']]),
-                        ],
-                        [
-                            'label' => Yii::t('backend', 'Logs'),
-                            'url' => ['/system/log/index'],
-                            'icon' => FAS::icon('clipboard-list', ['class' => ['nav-icon']]),
-                            'badge' => SystemLog::find()->count(),
-                            'badgeBgClass' => 'badge-danger',
-                        ],
+//                      End Test
                     ],
                 ]) ?>
             </nav>
@@ -480,104 +327,104 @@ $logEntries[] = [
     <!-- /footer -->
 
     <?php if (Yii::$app->user->can('administrator')) : ?>
-    <!-- control sidebar -->
-    <div class="control-sidebar control-sidebar-dark overflow-auto">
-        <div class="control-sidebar-content p-3">
-            <?php echo FormWidget::widget([
-                'model' => new FormModel([
-                    'keys' => [
-                        'frontend.options' => [
-                            'type' => FormModel::TYPE_HEADER,
-                            'content' => 'Frontend Options'
-                        ],
-                        'frontend.maintenance' => [
-                            'label' => Yii::t('backend', 'Maintenance mode'),
-                            'type' => FormModel::TYPE_DROPDOWN,
-                            'items' => [
-                                'disabled' => Yii::t('backend', 'Disabled'),
-                                'enabled' => Yii::t('backend', 'Enabled'),
+        <!-- control sidebar -->
+        <div class="control-sidebar control-sidebar-dark overflow-auto">
+            <div class="control-sidebar-content p-3">
+                <?php echo FormWidget::widget([
+                    'model' => new FormModel([
+                        'keys' => [
+                            'frontend.options' => [
+                                'type' => FormModel::TYPE_HEADER,
+                                'content' => 'Frontend Options'
+                            ],
+                            'frontend.maintenance' => [
+                                'label' => Yii::t('backend', 'Maintenance mode'),
+                                'type' => FormModel::TYPE_DROPDOWN,
+                                'items' => [
+                                    'disabled' => Yii::t('backend', 'Disabled'),
+                                    'enabled' => Yii::t('backend', 'Enabled'),
+                                ],
+                            ],
+                            'backend.options' => [
+                                'type' => FormModel::TYPE_HEADER,
+                                'content' => 'Backend Options'
+                            ],
+                            'adminlte.body-small-text' => [
+                                'label' => Yii::t('backend', 'Body small text'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.no-navbar-border' => [
+                                'label' => Yii::t('backend', 'No navbar border'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.navbar-small-text' => [
+                                'label' => Yii::t('backend', 'Navbar small text'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.navbar-fixed' => [
+                                'label' => Yii::t('backend', 'Fixed navbar'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.footer-small-text' => [
+                                'label' => Yii::t('backend', 'Footer small text'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.footer-fixed' => [
+                                'label' => Yii::t('backend', 'Fixed footer'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-small-text' => [
+                                'label' => Yii::t('backend', 'Sidebar small text'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-flat' => [
+                                'label' => Yii::t('backend', 'Sidebar flat style'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-legacy' => [
+                                'label' => Yii::t('backend', 'Sidebar legacy style'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-compact' => [
+                                'label' => Yii::t('backend', 'Sidebar compact style'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-fixed' => [
+                                'label' => Yii::t('backend', 'Fixed sidebar'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-collapsed' => [
+                                'label' => Yii::t('backend', 'Collapsed sidebar'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-mini' => [
+                                'label' => Yii::t('backend', 'Mini sidebar'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-child-indent' => [
+                                'label' => Yii::t('backend', 'Indent sidebar child menu items'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.sidebar-no-expand' => [
+                                'label' => Yii::t('backend', 'Disable sidebar hover/focus auto expand'),
+                                'type' => FormModel::TYPE_CHECKBOX,
+                            ],
+                            'adminlte.brand-small-text' => [
+                                'label' => Yii::t('backend', 'Brand small text'),
+                                'type' => FormModel::TYPE_CHECKBOX,
                             ],
                         ],
-                        'backend.options' => [
-                            'type' => FormModel::TYPE_HEADER,
-                            'content' => 'Backend Options'
-                        ],
-                        'adminlte.body-small-text' => [
-                            'label' => Yii::t('backend', 'Body small text'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.no-navbar-border' => [
-                            'label' => Yii::t('backend', 'No navbar border'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.navbar-small-text' => [
-                            'label' => Yii::t('backend', 'Navbar small text'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.navbar-fixed' => [
-                            'label' => Yii::t('backend', 'Fixed navbar'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.footer-small-text' => [
-                            'label' => Yii::t('backend', 'Footer small text'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.footer-fixed' => [
-                            'label' => Yii::t('backend', 'Fixed footer'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-small-text' => [
-                            'label' => Yii::t('backend', 'Sidebar small text'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-flat' => [
-                            'label' => Yii::t('backend', 'Sidebar flat style'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-legacy' => [
-                            'label' => Yii::t('backend', 'Sidebar legacy style'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-compact' => [
-                            'label' => Yii::t('backend', 'Sidebar compact style'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-fixed' => [
-                            'label' => Yii::t('backend', 'Fixed sidebar'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-collapsed' => [
-                            'label' => Yii::t('backend', 'Collapsed sidebar'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-mini' => [
-                            'label' => Yii::t('backend', 'Mini sidebar'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-child-indent' => [
-                            'label' => Yii::t('backend', 'Indent sidebar child menu items'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.sidebar-no-expand' => [
-                            'label' => Yii::t('backend', 'Disable sidebar hover/focus auto expand'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
-                        'adminlte.brand-small-text' => [
-                            'label' => Yii::t('backend', 'Brand small text'),
-                            'type' => FormModel::TYPE_CHECKBOX,
-                        ],
+                    ]),
+                    'submitText' => FAS::icon('save') . ' ' . Yii::t('backend', 'Save'),
+                    'submitOptions' => ['class' => 'btn btn-primary'],
+                    'formOptions' => [
+                        'action' => ['/system/settings/index'],
+                        'method' => 'post'
                     ],
-                ]),
-                'submitText' => FAS::icon('save').' '.Yii::t('backend', 'Save'),
-                'submitOptions' => ['class' => 'btn btn-primary'],
-                'formOptions' => [
-                    'action' => ['/system/settings/index'],
-                    'method' => 'post'
-                ],
-            ]) ?>
+                ]) ?>
+            </div>
         </div>
-    </div>
-    <!-- /control sidebar -->
+        <!-- /control sidebar -->
     <?php endif; ?>
 </div>
 <?php $this->endContent(); ?>

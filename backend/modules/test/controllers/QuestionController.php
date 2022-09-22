@@ -2,17 +2,15 @@
 
 namespace backend\modules\test\controllers;
 
-use backend\modules\test\models\forms\CreateQuestionForm;
-use common\models\Tag;
-use Swagger\Util;
-use Yii;
-use common\models\Question;
+use backend\modules\test\models\forms\QuestionForm;
 use backend\modules\test\models\search\QuestionSearch;
+use common\models\Question;
+use common\models\Tag;
+use Yii;
 use yii\db\Query;
-use yii\helpers\VarDumper;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Response;
 
 /**
@@ -68,49 +66,32 @@ class QuestionController extends Controller
      */
     public function actionCreate()
     {
-        $model = new CreateQuestionForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        }
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->form(
+            new QuestionForm(
+                new Question()
+            )
+        );
     }
 
-    /**
-     * Updates an existing Question model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return mixed
-     */
     public function actionUpdate($id)
     {
-        $questionModel = $this->findModel($id);
-        $model = new CreateQuestionForm([
-            'id' => $id
-        ]);
-        $model->tagNames = (new Query())->select(['group_concat(name separator ",") as name'])
-            ->from("tag")
-            ->leftJoin("question_tag", "question_tag.tag_id = tag.id")
-            ->andWhere(['question_tag.question_id' => $id])
-            ->one()['name'];
+        return $this->form(
+            new QuestionForm(
+                $this->findModel($id)
+            )
+        );
+    }
 
-        $answers = (new Query())->select(['text', 'correct'])
-            ->from('answer')
-            ->andWhere(['question_id' => $id])
-            ->orderBy(['sort' => SORT_ASC])
-            ->all();
-        $model->answers = $answers;
-
-        $model->setAttributes($questionModel->attributes);
+    public function form(QuestionForm $model)
+    {
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
-        return $this->render('update', [
+        return $this->render('_form', [
             'model' => $model,
         ]);
     }
+
 
     /**
      * Deletes an existing Question model.

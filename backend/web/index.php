@@ -11,7 +11,7 @@ require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');
 // Bootstrap application
 require(__DIR__ . '/../../common/config/bootstrap.php');
 require(__DIR__ . '/../config/bootstrap.php');
-
+error_reporting(!8);
 
 $config = \yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../../common/config/base.php'),

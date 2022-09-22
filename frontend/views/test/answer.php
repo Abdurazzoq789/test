@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => ['gridview', 'table-responsive'],
                 ],
                 'tableOptions' => [
-                    'class' => ['table', 'text-nowrap', 'table-striped', 'table-bordered', 'mb-0'],
+                    'class' => ['table', 'table-striped', 'table-bordered', 'mb-0'],
                 ],
                 'dataProvider' => $dataProvider,
                 'columns' => [

@@ -53,6 +53,8 @@ class UserController extends Controller
     {
         $searchModel = new TestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['user_id' => $_GET['id']]);
+        $dataProvider->query->orderBy(['status' => SORT_ASC, 'started_at' => SORT_DESC]);
 
         return $this->render('tests', [
             'searchModel' => $searchModel,

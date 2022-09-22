@@ -1,5 +1,6 @@
 <?php
 
+use rmrevin\yii\fontawesome\FAS;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -15,9 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="test-index">
     <div class="card">
-        <div class="card-body p-0">
-            <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+        <div class="card-header">
+            <?php echo Html::a(Yii::t('backend', 'Create {modelClass}', [
+                'modelClass' => 'Test',
+            ]), ['create'], ['class' => 'btn btn-success']) ?>
+        </div>
 
+        <div class="card-body p-0">
             <?php echo GridView::widget([
                 'layout' => "{items}\n{pager}",
                 'options' => [
@@ -32,17 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'title',
                     [
-                        'attribute' => 'started_at',
+                        'attribute' => 'deadline',
                         'value' => function ($model) {
-                            return Yii::$app->formatter->asDatetime($model->started_at, 'medium');
+                            return $model->deadline . ' Minutes';
                         }
                     ],
                     'count',
                     [
+                        'label' => 'Correct Answer Count',
+                        'value' => function ($model) {
+                            return $model->getTestResult();
+                        }
+                    ],
+                    [
                         'class' => 'yii\grid\ActionColumn',
-                        'headerOptions' => ['style' => 'text-align:center;min-width:120px;max-width:220px;width:220px'],
                         'template' => '{buttons}',
-                        'contentOptions' => ['style' => 'min-width:120px;max-width:220px;width:220px;text-align:center'],
+                        'options' => ['style' => 'width: 140px'],
                         'buttons' => [
                             'buttons' => function ($url, $model) {
                                 $start = Url::to(['/test/begin', 'id' => $model->id]);
@@ -51,27 +61,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 if ($model->status != \common\models\Test::STATUS_COMPETED) {
                                     $code = <<<BUTTONS
                                     <div>
-                                        <a href="{$start}" data-pjax="0" class="btn btn-info btn-icon">
-                                            <div>
+                                        <a href="{$start}"  data-deadline="{$model->deadline}" data-pjax="0" class="btn btn-success">
                                                 <i class="fa fa-check"></i>
-                                            </div>
                                         </a>
                                     </div>
 BUTTONS;
                                 } else {
                                     $code = <<<BUTTONS
                                     <div>
-                                        <a href="{$result}" data-pjax="0" class="btn btn-info btn-icon">
-                                            <div>
+                                        <a href="{$result}" data-pjax="0" class="btn btn-primary">
                                                 <i class="fa fa-eye"></i>
-                                            </div>
                                         </a>
                                     </div>
 BUTTONS;
                                 }
                                 return $code;
-                            }
-
+                            },
                         ],
                     ]
                 ],

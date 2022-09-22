@@ -26,12 +26,18 @@ class TestForm extends \yii\base\Model
 
     public $id;
 
+    public $tagIds;
+
+    public $deadline;
+
+    public $levelIds;
+
     public function rules()
     {
         return [
-            [['id', 'count', 'level_id', 'user_id'], 'integer'],
-            [['title', 'count', 'level_id', 'user_id'], 'required'],
-            [['tagNames', 'started_at'], 'safe'],
+            [['id', 'count', 'user_id', 'deadline', 'level_id'], 'integer'],
+            [['title', 'count', 'user_id', 'deadline'], 'required'],
+            [['tagNames', 'started_at', 'levelIds', 'tagIds'], 'safe'],
         ];
     }
 
@@ -41,12 +47,8 @@ class TestForm extends \yii\base\Model
             return false;
         }
 
-        $this->started_at = strtotime($this->started_at);
-        $levelQuestionCount = Question::find()->andWhere(['level_id' => $this->level_id])->count();
-        if ($this->count > $levelQuestionCount) {
-            $this->addError('count', "Not enough question");
-            return false;
-        }
+        $this->deadline = abs($this->deadline);
+
         $model = new Test();
         if ($this->id) {
             $model = Test::findOne($this->id);
@@ -60,11 +62,22 @@ class TestForm extends \yii\base\Model
             return false;
         }
 
-        $questions = Question::find()
-            ->andWhere(['level_id' => $this->level_id])
-            ->orderBy('rand()')
-            ->limit($this->count)->all();
-        foreach ($questions as $index => $question) {
+        $questionsQuery = Question::find()
+            ->andFilterWhere(['level_id' => $this->levelIds]);
+
+        if ($this->tagIds){
+            $questionsQuery->leftJoin("question_tag", "question_tag.question_id = question.id")
+                ->andWhere(['question_tag.tag_id' => $this->tagIds]);
+        }
+
+        $questionsQuery->orderBy('rand()')
+            ->limit($this->count);
+
+        if ($questionsQuery->count() < $model->count){
+            $model->updateAttributes(['count' => $questionsQuery->count()]);
+        }
+
+        foreach ($questionsQuery->all() as $index => $question) {
             $testQuestion = new TestQuestion([
                 'test_id' => $model->id,
                 'question_id' => $question->id

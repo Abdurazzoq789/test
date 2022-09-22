@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "answer".
@@ -100,5 +101,15 @@ class Answer extends \yii\db\ActiveRecord
     public static function find()
     {
         return new \common\models\query\AnswerQuery(get_called_class());
+    }
+
+    public static function getAnswerdCount($test_id)
+    {
+        $query = (new Query())->from('answer')
+            ->leftJoin("test_question_answer tqa", "answer.id = tqa.answer_id")
+            ->leftJoin("test_question tq", "tq.id = tqa.test_question_id")
+            ->andWhere(['tq.test_id' => $test_id]);
+
+        return $query->count();
     }
 }
