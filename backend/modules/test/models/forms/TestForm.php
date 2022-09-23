@@ -53,8 +53,10 @@ class TestForm extends \yii\base\Model
     public function rules()
     {
         return [
-            [['id', 'count', 'user_id', 'deadline', 'level_id'], 'integer'],
+            [['id', 'user_id', 'level_id'], 'integer'],
             [['title', 'count', 'deadline'], 'required'],
+            [['count'], 'integer', 'min' => 1, 'max' => Question::getAllCount()],
+            [['deadline'], 'integer', 'min' => 1],
             [['tagNames', 'started_at', 'levelIds', 'tagIds'], 'safe'],
         ];
     }
@@ -88,7 +90,7 @@ class TestForm extends \yii\base\Model
                 ->andWhere(['question_tag.tag_id' => $this->tagIds]);
         }
 
-        $questionsQuery->orderBy('rand()')
+        $questionsQuery->active()->orderBy('rand()')
             ->limit($this->count);
 
         if ($questionsQuery->count() < $model->count){

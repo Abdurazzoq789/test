@@ -2,6 +2,8 @@
 
 namespace common\models\query;
 
+use common\models\Question;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Question]].
  *
@@ -9,10 +11,10 @@ namespace common\models\query;
  */
 class QuestionQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    public function active()
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['status' => Question::STATUS_ACTIVE]);
+    }
 
     /**
      * {@inheritdoc}

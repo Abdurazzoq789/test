@@ -38,7 +38,7 @@ class m220920_054652_create_answer_table extends Migration
             'question_id',
             '{{%question}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
     }
 

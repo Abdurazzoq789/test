@@ -28,7 +28,7 @@ class QuestionForm extends Model
 
     public Question $question;
 
-    public function __construct(Question $question,$config = [])
+    public function __construct(Question $question, $config = [])
     {
         parent::__construct($config);
 
@@ -61,38 +61,72 @@ class QuestionForm extends Model
         if (!$this->validate()) {
             return false;
         }
+
+
         $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            $model = $this->question;
 
-        $model = $this->question;
+            $this->tagNames = $this->removeDuplicateTags($this->tagNames);
+            $model->setAttributes($this->attributes);
 
-        $model->setAttributes($this->attributes);
 
-        if (!$model->save()) {
-            $transaction->rollBack();
-            $this->addErrors($model->errors);
-            return false;
-        }
-
-        if (count($this->answers)) {
-            $counter = 1;
-            Answer::deleteAll(['question_id' => $model->id]);
-            foreach ($this->answers as $index => $answer) {
-                $answerModel = new Answer();
-                $answerModel->setAttributes($answer);
-                $answerModel->sort = $counter;
-                $answerModel->question_id = $model->id;
-                if (!$answerModel->save()) {
-                    $transaction->rollBack();
-                    $this->addErrors($answerModel->errors);
-                    return false;
-                }
-                $counter++;
+            if (!$model->save()) {
+                $transaction->rollBack();
+                $this->addErrors($model->errors);
+                return false;
             }
+
+            if (!$this->saveAnswers($this->answers, $model->id)) {
+                $transaction->rollBack();
+                return false;
+            }
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
         }
 
-        $transaction->commit();
         return $model;
     }
 
+    public function saveAnswers($answers, $question_id)
+    {
+        if (count($answers) <= 0) {
+            return true;
+        }
+
+        $counter = 1;
+        Answer::deleteAll(['question_id' => $question_id]);
+        foreach ($answers as $index => $answer) {
+            $check = Answer::find()->andWhere(['question_id' => $question_id])->andWhere(['lower(text)' => $answer])->exists();
+            if ($check) {
+                $this->addError('answers', 'Not available same name in answers');
+                return false;
+            }
+            $answerModel = new Answer();
+            $answerModel->setAttributes($answer);
+            $answerModel->sort = $counter;
+            $answerModel->question_id = $question_id;
+            if (!$answerModel->save()) {
+                $this->addErrors($answerModel->errors);
+                return false;
+            }
+            $counter++;
+        }
+
+        return true;
+    }
+
+    public function removeDuplicateTags($tagNames)
+    {
+        $tagNames = mb_strtolower($tagNames);
+        $result = explode(',', $tagNames);
+
+        $result = array_unique($result);
+
+        return implode(',', $result);
+    }
 
 }

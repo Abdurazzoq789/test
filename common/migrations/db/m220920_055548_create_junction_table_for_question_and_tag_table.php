@@ -36,7 +36,7 @@ class m220920_055548_create_junction_table_for_question_and_tag_table extends Mi
             'question_id',
             '{{%question}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
 
         // creates index for column `tag_id`
@@ -53,7 +53,7 @@ class m220920_055548_create_junction_table_for_question_and_tag_table extends Mi
             'tag_id',
             '{{%tag}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
     }
 

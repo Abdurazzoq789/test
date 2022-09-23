@@ -117,4 +117,12 @@ class Tag extends \yii\db\ActiveRecord
     {
         return self::find()->andWhere(['like', 'lower(name)', mb_strtolower($query)])->all();
     }
+
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive'
+        ];
+    }
 }

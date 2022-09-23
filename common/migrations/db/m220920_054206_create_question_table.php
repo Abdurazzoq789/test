@@ -39,7 +39,7 @@ class m220920_054206_create_question_table extends Migration
             'level_id',
             '{{%level}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
     }
 

@@ -46,6 +46,7 @@ class Question extends \yii\db\ActiveRecord
         return [
             [['text'], 'string'],
             [['score'], 'number'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
             [['tagNames'], 'safe'],
             [['level_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => Level::className(), 'targetAttribute' => ['level_id' => 'id']],
@@ -146,6 +147,11 @@ class Question extends \yii\db\ActiveRecord
     public static function find()
     {
         return new \common\models\query\QuestionQuery(get_called_class());
+    }
+
+    public static function getAllCount()
+    {
+        return self::find()->active()->count();
     }
 
     public static function getStatus()

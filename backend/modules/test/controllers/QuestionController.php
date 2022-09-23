@@ -101,7 +101,7 @@ class QuestionController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->updateAttributes(['status' => Question::STATUS_INACTIVE]);
 
         return $this->redirect(['index']);
     }

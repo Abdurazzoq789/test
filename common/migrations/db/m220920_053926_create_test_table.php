@@ -39,7 +39,7 @@ class m220920_053926_create_test_table extends Migration
             'user_id',
             '{{%user}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
     }
 

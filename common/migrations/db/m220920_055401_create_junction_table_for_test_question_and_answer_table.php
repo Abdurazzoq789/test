@@ -36,7 +36,7 @@ class m220920_055401_create_junction_table_for_test_question_and_answer_table ex
             'test_question_id',
             '{{%test_question}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
 
         // creates index for column `answer_id`
@@ -53,7 +53,7 @@ class m220920_055401_create_junction_table_for_test_question_and_answer_table ex
             'answer_id',
             '{{%answer}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
     }
 

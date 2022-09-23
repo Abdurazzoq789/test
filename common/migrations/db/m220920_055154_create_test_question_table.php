@@ -36,7 +36,7 @@ class m220920_055154_create_test_question_table extends Migration
             'test_id',
             '{{%test}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
 
         // creates index for column `question_id`
@@ -53,7 +53,7 @@ class m220920_055154_create_test_question_table extends Migration
             'question_id',
             '{{%question}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
     }
 

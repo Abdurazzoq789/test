@@ -240,22 +240,22 @@ $logEntries[] = [
                             'icon' => FAR::icon('circle', ['class' => ['nav-icon']]),
                             'active' => Yii::$app->controller->id === 'question',
                         ],
-                        [
-                            'label' => Yii::t('backend', 'Tags'),
-                            'url' => ['/test/tag/index'],
-                            'icon' => FAS::icon('exchange-alt', ['class' => ['nav-icon']]),
-                            'active' => (Yii::$app->controller->id == 'tag'),
-                        ],
+//                        [
+//                            'label' => Yii::t('backend', 'Tags'),
+//                            'url' => ['/test/tag/index'],
+//                            'icon' => FAS::icon('exchange-alt', ['class' => ['nav-icon']]),
+//                            'active' => (Yii::$app->controller->id == 'tag'),
+//                        ],
                         [
                             'label' => Yii::t('backend', 'Levels'),
                             'url' => ['/test/level/index'],
                             'icon' => FAS::icon('sync', ['class' => ['nav-icon']]),
                         ],
-                        [
-                            'label' => Yii::t('backend', 'Cache'),
-                            'url' => ['/system/cache/index'],
-                            'icon' => FAS::icon('sync', ['class' => ['nav-icon']]),
-                        ],
+//                        [
+//                            'label' => Yii::t('backend', 'Cache'),
+//                            'url' => ['/system/cache/index'],
+//                            'icon' => FAS::icon('sync', ['class' => ['nav-icon']]),
+//                        ],
 //                      End Test
                     ],
                 ]) ?>

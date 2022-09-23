@@ -1,5 +1,6 @@
 <?php
 
+use common\grid\EnumColumn;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -16,13 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card">
         <div class="card-header">
             <?php echo Html::a(Yii::t('backend', 'Create {modelClass}', [
-    'modelClass' => 'Tag',
-]), ['create'], ['class' => 'btn btn-success']) ?>
+                'modelClass' => 'Tag',
+            ]), ['create'], ['class' => 'btn btn-success']) ?>
         </div>
 
         <div class="card-body p-0">
             <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+
             <?php echo GridView::widget([
                 'layout' => "{items}\n{pager}",
                 'options' => [
@@ -36,15 +37,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
 
-                    'id',
                     'name',
-                    'type',
-                    'status',
-                    
+                    [
+                        'class' => EnumColumn::class,
+                        'attribute' => 'status',
+                        'enum' => \common\models\Tag::getStatuses(),
+                        'filter' => \common\models\Tag::getStatuses()
+                    ],
+
                     ['class' => \common\widgets\ActionColumn::class],
                 ],
             ]); ?>
-    
+
         </div>
         <div class="card-footer">
             <?php echo getDataProviderSummary($dataProvider) ?>

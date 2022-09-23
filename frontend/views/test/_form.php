@@ -21,7 +21,9 @@ use yii\bootstrap4\ActiveForm;
                     <?php echo $form->errorSummary($model); ?>
 
                     <?php echo $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-                    <?php echo $form->field($model, 'count')->textInput(['type' => 'number'])->label('Question Count') ?>
+                    <?php echo $form->field($model, 'count')
+                        ->textInput(['type' => 'number'])
+                        ->label('Question Count')->hint('Available Question count '. \common\models\Question::getAllCount()) ?>
                     <?php echo $form->field($model, 'deadline')->textInput(['type' => 'number'])->label('Dead line fore test')->hint("Please write minutes") ?>
 
                 </div>

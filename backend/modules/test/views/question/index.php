@@ -1,5 +1,7 @@
 <?php
 
+use common\grid\EnumColumn;
+use common\models\Question;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -34,22 +36,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [
-//                    ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
+                    ['class' => 'yii\grid\SerialColumn'],
                     'text',
-                    // 'score',
-                    // 'created_at',
-                    // 'updated_at',
+                    [
+                        'attribute' => 'level.name',
+                        'options' => ['style' => 'width: 80px'],
+                    ],
+                    [
+                        'class' => EnumColumn::class,
+                        'attribute' => 'status',
+                        'enum' => Question::getStatus(),
+                        'filter' => Question::getStatus()
+                    ],
 
                     [
                         'class' => \common\widgets\ActionColumn::class,
                         'template' => '{update} {delete}',
-                        'options' => ['style' => 'width: 140px'],
+                        'options' => ['style' => 'width: 100px'],
                         'visibleButtons' => [
                             'login' => Yii::$app->user->can('administrator')
                         ]
-
                     ],
                 ],
             ]); ?>

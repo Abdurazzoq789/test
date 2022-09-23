@@ -36,7 +36,7 @@ class m220920_055537_create_junction_table_for_test_and_tag_table extends Migrat
             'test_id',
             '{{%test}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
 
         // creates index for column `tag_id`
@@ -53,7 +53,7 @@ class m220920_055537_create_junction_table_for_test_and_tag_table extends Migrat
             'tag_id',
             '{{%tag}}',
             'id',
-            'CASCADE'
+            'restrict'
         );
     }
 

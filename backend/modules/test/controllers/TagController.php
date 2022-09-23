@@ -98,7 +98,7 @@ class TagController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->updateAttributes(['status' => Tag::STATUS_INACTIVE]);
 
         return $this->redirect(['index']);
     }

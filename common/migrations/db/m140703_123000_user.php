@@ -36,7 +36,7 @@ class m140703_123000_user extends Migration
             'gender' => $this->smallInteger(1)
         ]);
 
-        $this->addForeignKey('fk_user', '{{%user_profile}}', 'user_id', '{{%user}}', 'id', 'cascade', 'cascade');
+        $this->addForeignKey('fk_user', '{{%user_profile}}', 'user_id', '{{%user}}', 'id', 'restrict', 'restrict');
 
     }
 
