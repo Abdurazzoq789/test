@@ -3,6 +3,8 @@
  * @var $model \common\models\Test
  */
 
+use common\models\Util;
+
 $correctCount = $model->getTestCorrectAnswerCount();
 ?>
 
@@ -10,8 +12,10 @@ $correctCount = $model->getTestCorrectAnswerCount();
 <div class="card">
     <div class="card-body">
         <div class="card-header">
-            <p><span style="color: green">Correct answers count</span> : <b><?= (int)$correctCount ?></b>
-                || <span style="color: red">Incorrect answers count</span> : <b><?= $model->count - $correctCount ?></b></p>
+            <p><span style="color: green">Correct answers percent</span> :
+                <b><?= Util::getPercent($model->count, $correctCount) . '%' ?></b>
+                || <span style="color: red">Incorrect answers percent</span> :
+                <b><?= Util::getPercent($model->count, $model->count - $correctCount) . '%' ?></b></p>
         </div>
         <div class="row my-row">
             <?php foreach ($model->testQuestions as $testQuestion) : ?>
@@ -24,8 +28,9 @@ $correctCount = $model->getTestCorrectAnswerCount();
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><?= $testQuestion->question->text ?></h5>
-                            <p class="card-text">Your answer :  <span class="btn btn-sm <?= $btnClass ?>"><b><?= $userAnswer['text'] ?></b></span></p>
-                            <p class="card-text">Correct answer :  <b><?= $correctAnswer['text'] ?></b></p>
+                            <p class="card-text">Your answer : <span
+                                        class="btn btn-sm <?= $btnClass ?>"><b><?= $userAnswer['text'] ?></b></span></p>
+                            <p class="card-text">Correct answer : <b><?= $correctAnswer['text'] ?></b></p>
                         </div>
                     </div>
                 </div>

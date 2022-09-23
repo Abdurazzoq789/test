@@ -37,11 +37,7 @@ class QuestionForm extends Model
         $this->level_id = $question->level_id;
         $this->status = $question->status;
         $this->answers = $question->answers;
-        $this->tagNames = (new Query())->select(['group_concat(name separator ",") as name'])
-            ->from("tag")
-            ->innerJoin("question_tag", "question_tag.tag_id = tag.id")
-            ->andWhere(['question_tag.question_id' => $question->id])
-            ->one()['name'];
+        $this->tagNames = join(',', $this->tagList($question->id));
 
         $this->question = $question;
     }
@@ -127,6 +123,15 @@ class QuestionForm extends Model
         $result = array_unique($result);
 
         return implode(',', $result);
+    }
+
+    private function tagList($question_id)
+    {
+        return (new Query())->select(['name'])
+            ->from("tag")
+            ->innerJoin("question_tag", "question_tag.tag_id = tag.id")
+            ->andWhere(['question_tag.question_id' => $question_id])
+            ->column();
     }
 
 }

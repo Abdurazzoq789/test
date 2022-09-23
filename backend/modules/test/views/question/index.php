@@ -2,6 +2,7 @@
 
 use common\grid\EnumColumn;
 use common\models\Question;
+use rmrevin\yii\fontawesome\FAS;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -53,8 +54,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => \common\widgets\ActionColumn::class,
                         'template' => '{update} {delete}',
                         'options' => ['style' => 'width: 100px'],
+                        'buttons' => [
+                                'delete' => function ($url, $model){
+                                    if ($model->status == Question::STATUS_ACTIVE){
+                                        return Html::a(
+                                            FAS::icon('trash', ['aria' => ['hidden' => true], 'class' => ['fa-fw']]),
+                                            $url,
+                                            [
+                                                'title' => Yii::t('backend', 'Inactive'),
+                                                'class' => ['btn', 'btn-xs', 'btn-danger'],
+                                                'data-method' => 'post'
+                                            ]
+                                        );
+                                    }
+
+                                    return Html::a(
+                                        FAS::icon('check', ['aria' => ['hidden' => true], 'class' => ['fa-fw']]),
+                                        \yii\helpers\Url::to(['active', 'id' => $model->id]),
+                                        [
+                                            'title' => Yii::t('backend', 'Active'),
+                                            'class' => ['btn', 'btn-xs', 'btn-primary']
+                                        ]
+                                    );
+                                }
+                        ],
                         'visibleButtons' => [
-                            'login' => Yii::$app->user->can('administrator')
+                            'delete' => Yii::$app->user->can('administrator')
                         ]
                     ],
                 ],

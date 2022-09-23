@@ -36,6 +36,9 @@ class LevelController extends Controller
     {
         $searchModel = new LevelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort = [
+            'defaultOrder' => ['status' => SORT_DESC]
+        ];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -103,6 +106,12 @@ class LevelController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionActive($id)
+    {
+        $this->findModel($id)->updateAttributes(['status' => Level::STATUS_ACTIVE]);
+
+        return $this->redirect(['index']);
+    }
     /**
      * Finds the Level model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

@@ -7,7 +7,6 @@ use backend\modules\test\models\search\QuestionSearch;
 use common\models\Question;
 use common\models\Tag;
 use Yii;
-use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -40,6 +39,9 @@ class QuestionController extends Controller
     {
         $searchModel = new QuestionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort = [
+            'defaultOrder' => ['status' => SORT_DESC]
+        ];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -102,6 +104,13 @@ class QuestionController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->updateAttributes(['status' => Question::STATUS_INACTIVE]);
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionActive($id)
+    {
+        $this->findModel($id)->updateAttributes(['status' => Question::STATUS_ACTIVE]);
 
         return $this->redirect(['index']);
     }
