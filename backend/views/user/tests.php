@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'label' => 'Correct Answer Count',
                         'value' => function ($model) {
-                            return $model->getTestResult();
+                            return $model->getTestCorrectAnswerCount();
                         }
                     ],
                     [

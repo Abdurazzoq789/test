@@ -67,6 +67,12 @@ class TestQuestion extends \yii\db\ActiveRecord
         return $this->hasMany(Answer::className(), ['id' => 'answer_id'])->viaTable('test_question_answer', ['test_question_id' => 'id']);
     }
 
+    public function getAnswersText()
+    {
+        return $this->getAnswers()->select(["group_concat(text separator ',') as text"])
+            ->orderBy('id')->one();
+    }
+
     /**
      * Gets query for [[Question]].
      *

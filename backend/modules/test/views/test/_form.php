@@ -22,6 +22,7 @@ use yii\bootstrap4\ActiveForm;
 
                     <?php echo $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
                     <?php echo $form->field($model, 'count')->textInput(['type' => 'number']) ?>
+                    <?php echo $form->field($model, 'deadline')->textInput(['type' => 'number']) ?>
 
                 </div>
             </div>
@@ -30,12 +31,6 @@ use yii\bootstrap4\ActiveForm;
             <div class="card">
                 <div class="card-body">
 
-                    <?php echo $form->field($model, 'started_at')->widget(DateTimePicker::class, [
-                        'options' => ['placeholder' => 'Enter start time ...'],
-                        'pluginOptions' => [
-                            'autoclose' => true
-                        ]
-                    ]) ?>
                     <?php echo $form->field($model, 'user_id')->widget(\kartik\select2\Select2::class, [
                         'data' => \common\models\User::getDropdownList(),
                         'options' => [
@@ -43,26 +38,21 @@ use yii\bootstrap4\ActiveForm;
                         ]
                     ]) ?>
 
-                    <?php echo $form->field($model, 'level_id')->widget(\kartik\select2\Select2::class, [
+                    <?php echo $form->field($model, 'levelIds')->widget(\kartik\select2\Select2::class, [
                         'data' => \common\models\Level::getDropdownList(),
                         'options' => [
-                            'placeholder' => 'Select Level for questions'
+                            'placeholder' => 'Select Level for questions',
+                            'multiple' => true,
                         ]
-                    ]) ?>
-                    <?= $form->field($model, 'tagNames')->widget(SelectizeTextInput::class, [
-                        // calls an action that returns a JSON object with matched
-                        // tags
-                        'loadUrl' => ['question/tag-list'],
-                        'options' => ['class' => 'form-control'],
-                        'clientOptions' => [
-                            'plugins' => ['remove_button'],
-                            'valueField' => 'name',
-                            'labelField' => 'name',
-                            'searchField' => ['name'],
-                            'create' => true,
-                        ],
-                    ]) ?>
+                    ])->label("Level") ?>
 
+                    <?php echo $form->field($model, 'tagIds')->widget(\kartik\select2\Select2::class, [
+                        'data' => \common\models\Tag::getDropdownList(),
+                        'options' => [
+                            'placeholder' => 'Select question tags',
+                            'multiple' => true,
+                        ]
+                    ])->label("Tags") ?>
                 </div>
                 <div class="card-footer">
                     <?php echo Html::submitButton(Yii::t('backend', 'Create'), ['class' => 'btn btn-success']) ?>

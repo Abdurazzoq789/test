@@ -108,8 +108,8 @@ class Answer extends \yii\db\ActiveRecord
         $query = (new Query())->from('answer')
             ->leftJoin("test_question_answer tqa", "answer.id = tqa.answer_id")
             ->leftJoin("test_question tq", "tq.id = tqa.test_question_id")
-            ->andWhere(['tq.test_id' => $test_id]);
+            ->andWhere(['tq.test_id' => $test_id])->groupBy(['tq.id'])->select(['count(*)'])->all();
 
-        return $query->count();
+        return count($query);
     }
 }

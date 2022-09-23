@@ -8,7 +8,8 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 
 $test = $testQuestion->test;
-$correctCount = $testQuestion->question->getCorrectAnswer()->count()
+$correctCount = $testQuestion->question->getCorrectAnswer()->count();
+$typeInput = ($correctCount > 1) ? 'checkbox' : 'radio';
 ?>
 <style>
     .custom-control-input.is-valid ~ .custom-control-label {
@@ -32,7 +33,7 @@ $correctCount = $testQuestion->question->getCorrectAnswer()->count()
             <div class="row">
                 <?php foreach ($testQuestion->question->answers as $answerIndex => $answer) : ?>
                     <div class="col-6">
-                        <input type="radio" name="BeginForm[answer_id]" value="<?= $answer->id ?>"
+                        <input type="<?= $typeInput ?>" name="BeginForm[answerIds][]" value="<?= $answer->id ?>"
                                id="<?= $answer->id ?>">
                         <label for="<?= $answer->id ?>"><?= $answer->text ?></label>
                     </div>

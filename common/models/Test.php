@@ -121,19 +121,18 @@ class Test extends \yii\db\ActiveRecord
         return $this->getTestQuestions()->count();
     }
 
-    public function getTestResult($correct = Answer::ANSWER_CORRECT)
+    public function getTestCorrectAnswerCount()
     {
-        $query = (new Query())->from('test_question_answer')
-            ->leftJoin("test_question tq", "tq.id = test_question_answer.test_question_id")
-            ->leftJoin("answer a", "a.id = test_question_answer.answer_id")
-            ->andWhere(['tq.test_id' => $this->id]);
-
-        if ($correct == Answer::ANSWER_CORRECT) {
-            $query->andWhere(['a.correct' => Answer::ANSWER_CORRECT]);
-        } elseif ($correct == Answer::ANSWER_INCORRECT) {
-            $query->andWhere(['a.correct' => Answer::ANSWER_INCORRECT]);
+        $testQuestions = $this->testQuestions;
+        $counter = 0;
+        foreach ($testQuestions as $index => $testQuestion) {
+            $userCorrectCount = $testQuestion->getAnswers()->andWhere(['answer.correct' => Answer::ANSWER_CORRECT])->count();
+            $questionCorrectCount = $testQuestion->question->getCorrectAnswer()->count();
+            if ($userCorrectCount == $questionCorrectCount){
+                $counter++;
+            }
         }
-        return $query->count();
+        return $counter;
     }
 
     /**

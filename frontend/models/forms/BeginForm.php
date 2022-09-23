@@ -6,6 +6,7 @@ use common\models\Test;
 use common\models\TestQuestion;
 use common\models\TestQuestionAnswer;
 use yii\db\Query;
+use yii\helpers\VarDumper;
 
 class BeginForm extends \yii\base\Model
 {
@@ -17,13 +18,15 @@ class BeginForm extends \yii\base\Model
 
     public $answer_id;
 
+    public $answerIds;
+
 
     public function __construct(Test $test, $config = [])
     {
         parent::__construct($config);
         $this->test = $test;
 
-        if (!$test->started_at){
+        if (!$test->started_at) {
             $test->updateAttributes(['started_at' => time()]);
         }
 
@@ -39,8 +42,7 @@ class BeginForm extends \yii\base\Model
 
         if ($this->testQuestion == null ||
             $this->test->status == Test::STATUS_COMPETED ||
-            time() > ($this->test->started_at + ($this->test->deadline * 60)))
-        {
+            time() > ($this->test->started_at + ($this->test->deadline * 60))) {
             $this->test->updateAttributes(['status' => Test::STATUS_COMPETED]);
             $this->done = true;
         }
@@ -49,27 +51,36 @@ class BeginForm extends \yii\base\Model
     public function rules()
     {
         return [
-          [['answer_id'], 'integer']
+            [['answer_id'], 'integer'],
+            [['answerIds'], 'safe']
         ];
     }
 
     public function save()
     {
-        if (!$this->validate()){
+        if (!$this->validate()) {
             return false;
         }
 
-        $testQuestionAnswer = new TestQuestionAnswer([
-            'test_question_id' => $this->testQuestion->id
-        ]);
-
-        $testQuestionAnswer->setAttributes($this->attributes);
-        if (!$testQuestionAnswer->save()){
-            $this->addErrors($testQuestionAnswer->errors);
-            return false;
+        if ((array)$this->answerIds) {
+            foreach ($this->answerIds as $index => $answerId) {
+                $this->createAnswer($answerId);
+            }
         }
 
         return true;
     }
 
+    public function createAnswer($answer_id)
+    {
+        $testQuestionAnswer = new TestQuestionAnswer([
+            'test_question_id' => $this->testQuestion->id,
+            'answer_id' => $answer_id
+        ]);
+
+        if (!$testQuestionAnswer->save()) {
+            $this->addErrors($testQuestionAnswer->errors);
+            return false;
+        }
+    }
 }

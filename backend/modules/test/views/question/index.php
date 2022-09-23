@@ -42,7 +42,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     // 'created_at',
                     // 'updated_at',
 
-                    ['class' => \common\widgets\ActionColumn::class],
+                    [
+                        'class' => \common\widgets\ActionColumn::class,
+                        'template' => '{update} {delete}',
+                        'options' => ['style' => 'width: 140px'],
+                        'visibleButtons' => [
+                            'login' => Yii::$app->user->can('administrator')
+                        ]
+
+                    ],
                 ],
             ]); ?>
 

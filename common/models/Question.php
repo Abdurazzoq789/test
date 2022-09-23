@@ -88,6 +88,12 @@ class Question extends \yii\db\ActiveRecord
         return $this->hasMany(Answer::className(), ['question_id' => 'id']);
     }
 
+    public function getCorrectAnswerText()
+    {
+        return $this->getAnswers()->andWhere(['correct' => Answer::ANSWER_CORRECT])
+            ->select(["group_concat(text separator ',') as text"])->orderBy('id')->one();
+    }
+
     public function getCorrectAnswer()
     {
         return $this->hasOne(Answer::className(), ['question_id' => 'id'])->andWhere(['correct' => Answer::ANSWER_CORRECT]);
